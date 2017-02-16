@@ -1,0 +1,148 @@
+#+TITLE: Learn Underscore.js
+#+AUTHOR: 6ml
+#+TAGS: web,js
+
+I want to learn underscore to improve my ablity.
+
+I'll learn it by write and read.
+First, I'll read the API documentation of libary.
+Then, I'll implement the functions by myself.
+Finally, match the functions that implement by myself and by the library,
+find the diffrent of it, and read the source to learn how to write js gracefully.
+
+Now, let's begin.
+Follow the API documentation of [[http://www.underscorejs.org/][underscore.js]].
+
+* Collection Function (Array or Object)
+  All most function have the argument [context].
+  But I don't know how to implement it.
+  So I just ingnore it.
+
+  When I could or read the source that make me know how to make it,
+  I'll make it.
+
+** each
+   _.each(list, iteratee)
+
+   #+BEGIN_SRC js
+     _.each = function(obj, iteratee) {
+       var length, i;
+       if (obj instanceof Array) {
+         for (i = 0, length = obj.length; i < length; i++) {
+           iteratee(obj[i], i, obj);
+         }
+       } else if (obj instanceof Object) {
+         for (i in obj) {
+           iteratee(obj[i], i, obj);
+         }
+       }
+       return obj;
+     };
+
+   #+END_SRC
+
+   Judge is the obj a Array or Object, and by the obj'type to elect the
+   for-statement.
+
+** map
+   _.map(list, iteratee)
+
+   #+BEGIN_SRC js
+     _.map = function(obj, iteratee) {
+       var length, i,
+           result = [];
+       if (obj instanceof Array) {
+         for (i = 0, length = obj.length; i < length; i++) {
+           result[i] = iteratee(obj[i], i, obj);
+         }
+       } else if (obj instanceof Object) {
+         var j = 0;
+         for (i in obj) {
+           result[j++] = iteratee(obj[i], i, obj);
+         }
+       }
+       return result;
+     };
+
+   #+END_SRC
+
+   Like _.each().
+
+** reduce
+   _.reduce(list, iteratee, [memo])
+
+   #+BEGIN_SRC js
+     _.reduce = function(obj, iteratee, memo) {
+       var length, i,
+           result = memo || 0;
+       if (obj instanceof Array) {
+         for (i = 0, length = obj.length; i < length; i++) {
+           result = iteratee(result, obj[i], i, obj);
+         }
+       } else if (obj instanceof Object) {
+         for (i in obj) {
+           result = iteratee(result, obj[i], i, obj);
+         }
+       }
+
+       return result;
+     };
+
+   #+END_SRC
+
+   The memo is the initial value.
+   It is lower than library's.
+
+** reduceRight
+   _.reduceRight(list, iteratee, memo)
+
+   #+BEGIN_SRC js
+     _.reduceRight = function(obj, iteratee, memo) {
+       var i,
+           result = memo || 0;
+       if (obj instanceof Array) {
+         for (i = obj.length - 1; i >= 0; i--) {
+           result = iteratee(result, obj[i], i, obj);
+         }
+       } else if (obj instanceof Object) {
+         var key = [];
+         for (i in obj) {
+           key.push(i);
+         }
+         for (i = key.length - 1; i >= 0; i--) {
+           result = iteratee(result, obj[key[i]], key[i], obj);
+         }
+       }
+
+       return result;
+     };
+
+   #+END_SRC
+
+   I think I should encapsulation the keys of Object.
+   And the reduceRight is really alike the reduce.
+
+** find
+   _.find(list, predicate)
+
+   #+BEGIN_SRC js
+     _.find = function(obj, predicate) {
+       var i, length;
+
+       if (obj instanceof Array) {
+         for (i = 0, length = obj.length; i < length; i++) {
+           if (predicate(obj[i], i, obj)) {
+             return obj[i];
+           }
+         }
+       } else if (obj instanceof Object) {
+         for (i in obj) {
+           if (predicate(obj[i], i, obj)) {
+             return obj[i];
+           }
+         }
+       }
+       return undefined;
+     };
+
+   #+END_SRC
