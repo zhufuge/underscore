@@ -9,5 +9,25 @@ var _ = require('underscore');
 // var sum = _.reduce(['12', 2, 3], function(a, b) {return a + b;});
 // console.log(sum);
 
-var even = _.find([1, 3, 3, 5, 9], function(num){ return num % 2 == 0; });
-console.log(even);
+// var even = _.filter([1, 2, 3, 5, 9, 10], function(num){ return num % 2 === 0; });
+// console.log(even);
+
+// var listOfPlays = [
+//   {a: 12, b: 'as', c: 32},
+//   {a: 10, b: 'as', c: 32},
+//   {a: 12, b: 's', c: 20},
+// ];
+
+//var listOfPlays = [123, 12, 23, 123];
+
+// var listOfPlays = {a:12, b:'s'};
+
+var listOfPlays = [
+  {a: 12, b: 'as', c: 32},
+  {a: 10, b: 'as', c: 32},
+  {a: 12, b: 's', c: 20},
+];
+
+listOfPlays = {a: 12, b: 'as', c: 32};
+var found = _.contains(12);
+console.log(found);

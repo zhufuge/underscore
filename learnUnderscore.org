@@ -146,3 +146,32 @@ Follow the API documentation of [[http://www.underscorejs.org/][underscore.js]].
      };
 
    #+END_SRC
+
+** filter
+   _.filter(list, predicate)
+
+   #+BEGIN_SRC js
+     _.filter = function(obj, predicate) {
+       var i, length, result;
+
+       if (obj instanceof Array) {
+         result = [];
+         for (i = 0, length = obj.length; i < length; i++) {
+           if (predicate(obj[i], i, obj)) {
+             result.push(obj[i]);
+           }
+         }
+       } else if (obj instanceof Object) {
+         result = {};
+         for (i in obj) {
+           if (predicate(obj[i], i, obj)) {
+             result[i] = obj[i];
+           }
+         }
+       }
+
+       return result;
+     };
+
+   #+END_SRC
+
