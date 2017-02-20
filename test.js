@@ -22,16 +22,19 @@ var _ = require('underscore');
 
 // var listOfPlays = {a:12, b:'s'};
 
-var listOfPlays = [
-  {a: 12, b: 'as', c: 32},
-  {a: 10, b: 'as', c: 32},
-  {a: 12, b: 's', c: 20},
-];
+// var listOfPlays = [
+//   {a: 12, b: 'as', c: 32},
+//   {a: 10, b: 'as', c: 32},
+//   {a: 12, b: 's', c: 20},
+// ];
 
-listOfPlays = {a: 12, b: 'as', c: 32};
-var found = _.contains(12);
-console.log(found);
+// listOfPlays = {a: 12, b: 'as', c: 32};
+// var found = _.contains(12);
+// console.log(found);
 
-(function() {
-  console.log(123);
-}.call(this));
+// (function() {
+//   console.log(123);
+// }.call(this));
+
+// console.log(_.initial([5, 4, 3, 2, 1], 3));
+console.log(_.last([5,4,3,2,1], 2));

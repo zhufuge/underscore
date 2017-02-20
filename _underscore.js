@@ -469,8 +469,165 @@
     return {};
   };
 
-  console.log(_.countBy([1, 2, 3, 4, 5], function(num) {
-    return num % 2 === 0 ? 'even': 'odd';
-  }));
+  // console.log(_.countBy([1, 2, 3, 4, 5], function(num) {
+  //   return num % 2 === 0 ? 'even': 'odd';
+  // }));
+
+
+  _.shuffle = function(obj) {
+    if (obj instanceof Array) {
+      var i, j,
+          tmp,
+          floor = Math.floor,
+          random = Math.random,
+          result = obj.concat();
+      for (i = result.length - 1; i >= 0; i--) {
+        j = floor((random() * i));
+        tmp = result[i];
+        result[i] = result[j];
+        result[j] = tmp;
+      }
+
+      return result;
+    }
+
+    return obj;
+  };
+
+  // console.log(_.shuffle([1, 2, 3, 4, 5, 6]));
+
+
+  _.sample = function(obj, n) {
+    if (obj instanceof Array) {
+      n = n || 1;
+      if (n === 1) {
+        return obj[Math.floor(Math.random() * (obj.length - 1))];
+      }
+      if (n > 1) {
+        var i,
+            floor = Math.floor,
+            random = Math.random,
+            length = obj.length,
+            tmp = obj.concat(),
+            result = [];
+        while (n > 0) {
+          i = floor(random() * --length);
+          result.push(tmp.splice(i, 1)[0]);
+          n--;
+        }
+        return result;
+      }
+    }
+
+    return obj;
+  };
+
+  // console.log(_.sample([1, 2, 3, 4, 5, 6]));
+  // console.log(_.sample([1, 2, 3, 4, 5, 6], 3));
+
+
+  _.toArray = function(obj) {
+    if (obj instanceof Array) {
+      return obj;
+    }
+
+    if (obj instanceof Object) {
+      var i, result = [];
+      for (i in obj) {
+        result.push(obj[i]);
+      }
+
+      return result;
+    }
+
+    return obj ? [obj] : undefined;
+  };
+
+  // console.log((function(){ return _.toArray(arguments).slice(1); })(1, 2, 3, 4));
+
+
+
+  _.size = function(obj) {
+    if (obj instanceof Array) {
+      return obj.length;
+    }
+
+    if (obj instanceof Object) {
+      var i, result = 0;
+      for (i in obj) {
+        result++;
+      }
+
+      return result;
+    }
+
+    return (obj) ? 1 : 0;
+  };
+
+  // console.log(_.size({one: 1, two: 2, three: 3}));
+
+
+  _.partition = function(obj, predicate) {
+    if (obj instanceof Array) {
+      var dissatisfy = [],
+          satisy = [],
+          i, length = obj.length;
+
+      for (i = 0; i < length; i++) {
+        if (predicate(obj[i], i, obj)) {
+          satisy.push(obj[i]);
+        } else {
+          dissatisfy.push(obj[i]);
+        }
+      }
+
+      return [satisy, dissatisfy];
+    }
+
+    return obj;
+  };
+
+  // console.log(_.partition([0, 1, 2, 3, 4, 5],
+  //                         function(a) { return a % 2 === 0; }));
+
+
+  _.first = function(array, n) {
+    if (array instanceof Array) {
+      if (typeof(n) === 'undefined') {
+        return array[0];
+      }
+      return array.slice(0, n);
+    }
+
+    return array;
+  };
+
+  // var a = [5, 4, 3, 2, 1];
+  // console.log(_.first(a, 3));
+
+  _.initial = function(array, n) {
+    if (array instanceof Array) {
+      n = n || 0;
+      return array.slice(0, array.length - n);
+    }
+
+    return array;
+  };
+
+  // console.log(_.initial([5, 4, 3, 2, 1], 3));
+
+  _.last = function(array, n) {
+    if (array instanceof Array) {
+      var length = array.length;
+      if (typeof n === 'undefined') {
+        return array[length - 1];
+      }
+      return array.slice(length - n, length);
+    }
+
+    return array;
+  };
+
+  console.log(_.last([5,4,3,2,1]));
 
 }.call(this));
