@@ -31,3 +31,7 @@ var listOfPlays = [
 listOfPlays = {a: 12, b: 'as', c: 32};
 var found = _.contains(12);
 console.log(found);
+
+(function() {
+  console.log(123);
+}.call(this));

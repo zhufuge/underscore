@@ -1,5 +1,3 @@
-var _ = null;
-
 (function(){
   _ = this;
 
@@ -287,4 +285,192 @@ var _ = null;
   // console.log(found);
 
 
-})();
+  _.pluck = function(obj, propertyName) {
+    if (obj instanceof Object) {
+      var i, length,
+          result = [];
+      for (i = 0, length = obj.length; i < length; i++) {
+        result.push(obj[i][propertyName]);
+      }
+
+      return result;
+    }
+
+    return [];
+  };
+
+  // var stooges = [
+  //   {name: 'moe', age: 40},
+  //   {name: 'larry', age: 50},
+  //   {name: 'curly', age: 60}
+  // ];
+  // console.log(_.pluck(stooges, 'age'));
+
+  _.createMaxOrMin = function(isMax) {
+    var cmp;
+    if (isMax) {
+      cmp = function(a, b) {
+        return a < b;
+      };
+    } else {
+      cmp = function(a, b) {
+        return a > b;
+      };
+    }
+
+    return  function(obj, iteratee) {
+      if (obj instanceof Array) {
+        var length = obj.length;
+
+        if (length === 0) {
+          return -Infinity;
+        }
+
+        var i, result = obj[0];
+
+        for (i = 1; i < length; i++) {
+          if ((iteratee)
+              ? cmp(iteratee(result), iteratee(obj[i]))
+              : cmp(result, obj[i])) {
+            result = obj[i];
+          }
+        }
+        return result;
+      }
+
+      return obj;
+    };
+  };
+
+  _.max = _.createMaxOrMin(true);
+  _.min = _.createMaxOrMin(false);
+
+  // var stooges = [
+  //   {name: 'moe', age: 40},
+  //   {name: 'larry', age: 50},
+  //   {name: 'curly', age: 60}
+  // ];
+  // console.log(_.max(stooges, function(stooge){ return stooge.age; }));
+
+  // var numbers = [10, 5, 100, 2, 1000];
+  // console.log(_.min(numbers));
+
+
+  _.sortBy = function(obj, iteratee) {
+    if (obj instanceof Array) {
+      if (iteratee instanceof Function) {
+        return obj.sort(function(a, b) {
+          return iteratee(a) - iteratee(b);
+        });
+      }
+      if ((typeof iteratee) === 'string') {
+        console.log('String');
+        return obj.sort(function(a, b) {
+          a = a[iteratee];
+          b = b[iteratee];
+          if (a > b) {
+            return 1;
+          }
+          if (a < b) {
+            return -1;
+          }
+          return 0;
+        });
+      }
+    }
+
+    return [];
+  };
+
+  // console.log(_.sortBy([1, 2, 3, 4, 5, 6], function(num){ return Math.sin(num); }));
+  // var stooges = [
+  //   {name: 'moe', age: 40},
+  //   {name: 'curly', age: 60},
+  //   {name: 'larry', age: 50}
+  // ];
+  // console.log(_.sortBy(stooges, 'name'));
+
+
+  _.groupBy = function(obj, iteratee) {
+    if (obj instanceof Array) {
+      var result = {},
+          i,
+          length = obj.length,
+          groupName;
+
+      if (iteratee instanceof Function) {
+        for (i = 0; i < length; i++) {
+          groupName = iteratee(obj[i], i, obj);
+          if (!(result[groupName])) {
+            result[groupName] = [];
+          }
+          result[groupName].push(obj[i]);
+        }
+      } else if ((typeof iteratee) === 'string') {
+        for (i = 0; i < length; i++) {
+          groupName = obj[i][iteratee];
+          if (!(result[groupName])) {
+            result[groupName] = [];
+          }
+          result[groupName].push(obj[i]);
+        }
+      }
+
+      return result;
+    }
+
+    return {};
+  };
+
+  // console.log(_.groupBy([1.3, 2.1, 2.4], function(num){ return Math.floor(num); }));
+  // console.log(_.groupBy(['one', 'two', 'three'], 'length'));
+  // var stooges = [{name: 'moe', age: 40}, {name: 'larry', age: 50}, {name: 'curly', age: 60}];
+  // console.log(_.groupBy(stooges, 'age'));
+
+  _.indexBy = function(obj, iteratee) {
+    if (obj instanceof Array) {
+      var i, length = obj.length,
+          result = {};
+      if (iteratee instanceof Function) {
+        for (i = 0; i < length; i++) {
+          result[iteratee(obj[i], i, obj)] = obj[i];
+        }
+      } else if ((typeof iteratee) === 'string') {
+        for (i = 0; i < length; i++) {
+          result[obj[i][iteratee]] = obj[i];
+        }
+      }
+
+      return result;
+    }
+
+    return {};
+  };
+
+
+  // var stooges = [{name: 'moe', age: 40}, {name: 'larry', age: 50}, {name: 'curly', age: 60}];
+  // console.log(_.indexBy(stooges, 'name'));
+
+
+  _.countBy = function(obj, iteratee) {
+    if (obj instanceof Array) {
+      var i, length = obj.length,
+          result = {},
+          countName;
+      for (i = 0; i < length; i++) {
+        countName = iteratee(obj[i], i, obj);
+        if (!(result[countName])) {
+          result[countName] = 0;
+        }
+        result[countName]++;
+      }
+      return result;
+    }
+    return {};
+  };
+
+  console.log(_.countBy([1, 2, 3, 4, 5], function(num) {
+    return num % 2 === 0 ? 'even': 'odd';
+  }));
+
+}.call(this));
