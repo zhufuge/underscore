@@ -628,6 +628,190 @@
     return array;
   };
 
-  console.log(_.last([5,4,3,2,1]));
+  // console.log(_.last([5,4,3,2,1]));
+
+  _.rest = function(array, index) {
+    if (array instanceof Array) {
+      if (typeof index === 'undefined') {
+        return array.slice(1);
+      }
+      return array.slice(index);
+    }
+
+    return array;
+  };
+
+  // console.log(_.rest([5, 4, 3, 2, 1]));
+
+  _.compact = function(array) {
+    if (array instanceof Array) {
+      var i, j,
+          length = array.length,
+          result = array.concat();
+      for (i = 0, j = 0; i < length; i++, j++) {
+        if (!(result[j])) {
+          result.splice(j--, 1);
+        }
+      }
+
+      return result;
+    }
+
+    return array;
+  };
+
+  // console.log(_.compact([0, 1, false, 2, '', 3]));
+
+  var flattener = function(array, result) {
+    if (array instanceof Array) {
+      for (var i = 0, length = array.length; i < length; i++) {
+        arguments.callee(array[i], result);
+      }
+    } else {
+      result.push(array);
+    }
+  };
+
+  _.flatten = function(array, shallow) {
+    if (array instanceof Array) {
+      var result = [];
+      if (typeof shallow === 'undefined') {
+        flattener(array, result);
+      } else if (shallow === true) {
+        var i, length = array.length;
+        for (i = 0; i <length; i++) {
+          result = result.concat(array[i]);
+        }
+      }
+      return result;
+    }
+    return array;
+  };
+
+  // console.log(_.flatten([1, [2], [3, [[4]]]], true));
+
+  _.without = function(array, values) {
+    var argLength = arguments.length;
+    if (array instanceof Array &&
+        argLength > 1) {
+      var i, index = array.length,
+          result = array.concat(),
+          out = _.rest(arguments);
+      while (index-- >= 0) {
+        for (i = 0; i < argLength; i++) {
+          if (result[index] === out[i]) {
+            result.splice(index, 1);
+          }
+        }
+      }
+
+      return result;
+    }
+
+    return array;
+  };
+
+  // console.log(_.without([1, 2, 1, 0, 3, 1, 4], 0, 1));
+
+
+  _.union = function(arrays) {
+    var argLength = arguments.length;
+    if (argLength < 1) {
+      return [];
+    }
+
+    var i, j, length,
+        result = [];
+    if (arguments[0] instanceof Array) {
+      result = arguments[0].concat();
+    } else {
+      result.push(arguments[0]);
+    }
+
+    for (i = 1; i < argLength; i++) {
+      if (arguments[i] instanceof Array) {
+        length = arguments[i].length;
+        for (j = 0; j < length; j++) {
+          if (result.indexOf(arguments[i][j]) === -1) {
+            result.push(arguments[i][j]);
+          }
+        }
+      } else {
+        result.push(arguments[i]);
+      }
+    }
+
+    return result;
+  };
+
+  // console.log(_.union([1, 2, 3], [101, 2, 1, 10], [2, 1, 12]));
+
+  _.intersection = function(arrays) {
+    var argLength = arguments.length;
+    if (argLength < 1) {
+      return [];
+    }
+
+    var i, j, length,
+        result = [],
+        tmp;
+    if (arguments[0] instanceof Array) {
+      result = arguments[0].concat();
+    } else {
+      result.push(arguments[0]);
+    }
+
+    for (i = 1; i < argLength; i++) {
+      length = result.length;
+      if (length === 0) {
+        return [];
+      }
+
+      if (arguments[i] instanceof Array) {
+        tmp = [];
+        for (j = 0; j < length; j++) {
+          if (arguments[i].indexOf(result[j]) > -1) {
+            tmp.push(result[j]);
+          }
+        }
+        result = tmp;
+      } else {
+        if (result.indexOf(arguments[i]) > -1) {
+          result = [arguments[i]];
+        }
+      }
+    }
+
+    return result;
+  };
+
+  // console.log(_.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]));
+  // console.log(_.intersection([1, 2, 3], [1], [2, 1]));
+
+  _.difference = function(array, others) {
+    if (array instanceof Array && others !== void 0) {
+      var i,
+          result = array.concat(),
+          length = others.length,
+          index = array.length;
+      while (index-- >= 0) {
+        for (i = 0; i < length; i++) {
+          if (result[index] === others[i]) {
+            result.splice(index, 1);
+          }
+        }
+      }
+
+      return result;
+    }
+
+    return array;
+  };
+
+  // console.log(_.difference([1, 2, 3, 4, 5], [5, 2, 10]));
+
+  _.uniq = _.unique = function(array, isSorted, iteratee) {
+    
+  };
 
 }.call(this));
