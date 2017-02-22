@@ -810,8 +810,261 @@
 
   // console.log(_.difference([1, 2, 3, 4, 5], [5, 2, 10]));
 
-  _.uniq = _.unique = function(array, isSorted, iteratee) {
-    
+  _.uniq = _.unique = function(array, isSorted) {
+    if (array instanceof Array) {
+      var i, j, length = array.length,
+          result = [];
+      if (isSorted === true) {
+        result.push(array[0]);
+        for (i = 1, j = 0; i < length; i++) {
+          if (array[i] !== result[j]) {
+            result.push(array[i]);
+            j++;
+          }
+        }
+        return result;
+      }
+
+      for (i = 0; i < length; i++) {
+        if (result.indexOf(array[i]) === -1) {
+          result.push(array[i]);
+        }
+      }
+      return result;
+    }
+
+    return array;
   };
+
+  // console.log(_.uniq([1, 2, 1, 3, 1, 4]));
+
+  _.zip = _.unzip= function(arrays) {
+    var i, j, ArgLength = arguments.length,
+        length,
+        result = [];
+
+    if (!(arguments[0] instanceof Array)) {
+      return [];
+    }
+
+    for (i = 0, length = arguments[0].length; i < length; i++) {
+      result[i] = [arguments[0][i]];
+    }
+
+    for (i = 1; i < ArgLength; i++) {
+      if (arguments[i] instanceof Array) {
+        for (j = 0, length = arguments[i].length; j < length; j++) {
+          result[j].push(arguments[i][j]);
+        }
+      }
+    }
+
+    return result;
+  };
+
+  // console.log(_.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]));
+
+  _.object = function(obj, values) {
+    if (!(obj instanceof Array)) {
+      return obj;
+    }
+
+    var i, length = obj.length,
+        result = {};
+
+    if (!(values instanceof Array)) {
+      for (i = 0; i < length; i++) {
+        result[obj[i][0]] = obj[i][1];
+      }
+
+      return result;
+    }
+
+    for (i = 0; i < length; i++) {
+      result[obj[i]] = values[i];
+    }
+
+    return result;
+  };
+
+  // console.log(_.object(['moe', 'larry', 'curly'], [30, 40, 50]));
+  // console.log(_.object([['moe', 30], ['larry', 40], ['curly', 50]]));
+
+
+  _.indexOf = function(array, value, isSorted) {
+    if (!(array instanceof Array)) {
+      throw TypeError(array + " is't a Array.");
+    }
+
+    // if (Array.prototype.hasOwnProperty('indexOf')) {
+    //   return array.indexOf(value);
+    // }
+
+    var i = 0, length = array.length;
+
+    if (isSorted) {
+      var j = length - 1,
+          floor = Math.floor,
+          result;
+
+      while (i <= j) {
+        result = floor((i + j) / 2);
+        console.log(result);
+        if (array[result] === value) {
+          return result;
+        }
+
+        if (array[result] > value) {
+          j = result - 1;
+        } else if (array[result] < value) {
+          i = result + 1;
+        }
+      }
+      return -1;
+    }
+
+    for (i = 0; i < length; i++) {
+      if (array[i] === value) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
+  // console.log(_.indexOf([0, 1, 2, 3], 3, true));
+
+  _.lastIndexOf = function(array, value, fromIndex) {
+    if (!(array instanceof Array)) {
+      throw TypeError(array + "is't a Array");
+    }
+
+    if (!(Array.prototype.hasOwnProperty('lastIndexOf'))) {
+      return array.lastIndexOf(value, fromIndex);
+    }
+
+    for (var i = array.length - 1; i > 0; i--) {
+      if (array[i] === value) {
+        return i;
+      }
+    }
+
+    return -1;
+  };
+
+  // console.log(_.lastIndexOf([1, 2, 3, 1, 2, 3], 2));
+
+  _.sortedIndex = function(list, value, iteratee) {
+    if (!(list instanceof Array)) {
+      throw TypeError(list);
+    }
+
+    if (value === void 0) {
+      return -1;
+    }
+
+    var i = 0,
+        j = list.length - 1,
+        floor = Math.floor,
+        result = 0,
+        curValue;
+
+    var createCur = (function() {
+      if (typeof iteratee === 'function') {
+        value = iteratee(value);
+        return function(i) {
+          return iteratee(list[i], i, list);
+        };
+      }
+      if (typeof iteratee === 'string') {
+        value = value[iteratee];
+        return function(i) {
+          return list[i][iteratee];
+        };
+      }
+      return function(i) {
+        return list[i];
+      };
+    })();
+
+    while (i <= j) {
+      result = floor((i + j) / 2);
+      curValue = createCur(result);
+      console.log(curValue);
+      if (curValue === value) {
+        return result;
+      }
+      if (curValue > value) {
+        j = result - 1;
+      } else if (curValue < value) {
+        i = result + 1;
+      }
+    }
+
+    return i;
+  };
+
+  // console.log(_.sortedIndex([10, 20, 30, 40, 50], 35));
+  // var stooges = [{name: 'moe', age: 40}, {name: 'curly', age: 60}];
+  // console.log(_.sortedIndex(stooges, {name: 'larry', age: 50}, 'age'));
+
+  _.findIndex = function(array, predicate) {
+    if (array instanceof Array) {
+      if (typeof predicate !== 'function') {
+        throw TypeError();
+      }
+
+      for (var i = 0, length = array.length; i < length; i++) {
+        if (predicate(array[i], i, array) === true) {
+          return i;
+        }
+      }
+    }
+
+    return -1;
+  };
+
+  // console.log(_.findIndex([4, 6, 8, 1, 12], function(i){ return i % 2 === 1; }));
+
+  _.findLastIndex = function(array, predicate) {
+    if (array instanceof Array) {
+      if (typeof predicate !== 'function') {
+        throw TypeError();
+      }
+
+      for (var i = array.length - 1; i >= 0; i--) {
+        if (predicate(array[i], i, array) === true) {
+          return i;
+        }
+      }
+    }
+
+    return -1;
+  };
+
+
+  _.range = function(start, stop, step) {
+    var i, argLength = arguments.length,
+        result = [];
+
+    if (argLength === 1) {
+      stop = start;
+      start = 0;
+    }
+
+    step = (step !== void 0) ? step : 1;
+
+    for (i = start; (i - stop) * step < 0; i += step) {
+      result.push(i);
+    }
+
+    return result;
+  };
+
+  console.log(_.range(10));
+  console.log(_.range(1, 11));
+  console.log(_.range(0, 30, 5));
+  console.log(_.range(0, -10, -1));
+  console.log(_.range(0));
+
 
 }.call(this));

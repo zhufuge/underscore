@@ -37,4 +37,6 @@ var _ = require('underscore');
 // }.call(this));
 
 // console.log(_.initial([5, 4, 3, 2, 1], 3));
-console.log(_.last([5,4,3,2,1], 2));
+// console.log(_.last([5,4,3,2,1], 2));
+
+console.log(_.unzip([['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]]));
