@@ -39,4 +39,10 @@ var _ = require('underscore');
 // console.log(_.initial([5, 4, 3, 2, 1], 3));
 // console.log(_.last([5,4,3,2,1], 2));
 
-console.log(_.unzip([['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]]));
+// console.log(_.unzip([['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]]));
+
+var an_obj = { 100: 'a', 2: 'b', 7: 'c' };
+console.log(Object.keys(an_obj)); // console: ['2', '7', '100']
+for (var i in an_obj) {
+  console.log(i);
+}

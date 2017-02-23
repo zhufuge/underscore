@@ -1060,11 +1060,133 @@
     return result;
   };
 
-  console.log(_.range(10));
-  console.log(_.range(1, 11));
-  console.log(_.range(0, 30, 5));
-  console.log(_.range(0, -10, -1));
-  console.log(_.range(0));
+  // console.log(_.range(10));
+  // console.log(_.range(1, 11));
+  // console.log(_.range(0, 30, 5));
+  // console.log(_.range(0, -10, -1));
+  // console.log(_.range(0));
 
+
+  _.keys = function(obj) {
+    if (!(obj instanceof Object)) {
+      return [];
+    }
+
+    if (Object.prototype.keys) {
+      return Object.prototype.keys(obj);
+    }
+
+    var keys = [];
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        keys.push(key);
+      }
+    }
+
+    return keys;
+  };
+
+  // console.log(_.keys({one: 1, two: 2, three: 3}));
+
+  _.allKeys = function(obj) {
+    if (!(obj instanceof Object)) {
+      return [];
+    }
+
+    var keys = [];
+    for (var key in obj) {
+      keys.push(key);
+    }
+
+    return keys;
+  };
+
+  // function Stooge(name) {
+  //   this.name = name;
+  // }
+  // Stooge.prototype.silly = true;
+  // console.log(_.allKeys(new Stooge("Moe")));
+
+
+  _.values = function(obj) {
+    if (!(obj instanceof Object)) {
+      return [];
+    }
+
+    var values = [];
+    for (var value in obj) {
+      values.push(obj[value]);
+    }
+
+    return values;
+  };
+
+  // console.log(_.values({one: 1, two: 2, three: 3}));
+
+  _.mapObject = function(obj, iteratee) {
+    if (!(obj instanceof Object)) {
+      return {};
+    }
+
+    if (typeof iteratee !== 'function' &&
+        iteratee === void 0) {
+      return {};
+    }
+
+    var result = {};
+    for (var key in obj) {
+      result[key] = iteratee(obj[key], key);
+    }
+
+    return result;
+  };
+
+  // console.log(_.mapObject({start: 5, end: 12}, function(val, key) {
+  //   return val + 5;
+  // }));
+
+
+  _.pairs = function(obj) {
+    if (!(obj instanceof Object)) {
+      return [];
+    }
+
+    var result = [];
+    for (var key in obj) {
+      result.push([key, obj[key]]);
+    }
+
+    return result;
+  };
+
+  // console.log(_.pairs({one: 1, two: 2, three: 3}));
+
+  _.invert = function(obj) {
+    if (!(obj instanceof Object)) {
+      return {};
+    }
+
+    var result = {};
+    for (var key in obj) {
+      result[obj[key]] = key;
+    }
+
+    return result;
+  };
+
+  // console.log(_.invert({Moe: "Moses", Larry: "Louis", Curly: "Jerome"}));
+
+
+  _.create = function(prototype, props) {
+    
+  };
+
+  _.has = function(obj, key) {
+    if (!(obj instanceof Object)) {
+      return [];
+    }
+
+    return obj.hasOwnProperty(key);
+  };
 
 }.call(this));
