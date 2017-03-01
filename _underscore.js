@@ -284,6 +284,7 @@
   // var found = _.contains([12, 1, 2], 3);
   // console.log(found);
 
+  // TODO _invoke(list, methodName, *arguments)
 
   _.pluck = function(obj, propertyName) {
     if (obj instanceof Object) {
@@ -695,11 +696,10 @@
     if (array instanceof Array &&
         argLength > 1) {
       var i, index = array.length,
-          result = array.concat(),
-          out = _.rest(arguments);
+          result = array.concat();
       while (index-- >= 0) {
-        for (i = 0; i < argLength; i++) {
-          if (result[index] === out[i]) {
+        for (i = 1; i < argLength; i++) {
+          if (result[index] === arguments[i]) {
             result.splice(index, 1);
           }
         }
@@ -1067,6 +1067,9 @@
   // console.log(_.range(0));
 
 
+  // TODO Function  _.bind  to  compose
+
+
   _.keys = function(obj) {
     if (!(obj instanceof Object)) {
       return [];
@@ -1178,15 +1181,267 @@
 
 
   _.create = function(prototype, props) {
-    
+    if (!(prototype instanceof Object)) {
+      return {};
+    }
+
+
+    if (Object.create) {
+      return Object.create(prototype, props);
+    }
+
+    var Ctor = function(){};
+    Ctor.prototype = prototype;
+    var result = new Ctor();
+
+    if (props instanceof Object) {
+      for (var key in props) {
+        result[key] = props[key];
+      }
+    }
+
+    return result;
   };
+
+  // function Stooge() {
+  //   this.a = 1;
+  //   this.b = 2;
+  //   this.getA = function() {
+  //     return this.a;
+  //   };
+  // }
+
+  // Stooge.prototype.x = 12;
+  // Stooge.prototype.y = 34;
+  // Stooge.prototype.getX = function() {
+  //   return this.x;
+  // };
+
+  // var moe = _.create(Stooge.prototype, {name: 'lm'});
+
+  // console.log(moe.x);
+
+
+  _.functions = function(obj) {
+    if (!(obj instanceof Object)) {
+      return [];
+    }
+
+    var key,
+        result = [];
+    for (key in obj) {
+      if (typeof obj[key] === 'function') {
+        result.push(key);
+      }
+    }
+
+    return result;
+  };
+
+  // console.log(_.functions(_));
+
+  _.findKey = function(obj, predicate) {
+    if (!(obj instanceof Object)) {
+      return undefined;
+    }
+
+    if (typeof predicate === 'string') {
+      return obj[predicate] || undefined;
+    }
+
+    if (typeof predicate === 'function') {
+      for (var key in obj) {
+        if (predicate(obj[key], key, obj)) {
+          return key;
+        }
+      }
+    }
+
+    return undefined;
+  };
+
+  _.extend = function(destination, sources) {
+    if (!(destination instanceof Object)) {
+      return {};
+    }
+
+    var i, key,
+        argLength = arguments.length;
+    for (i = 1; i < argLength; i++) {
+      if (arguments[i] instanceof Object) {
+        for (key in arguments[i]) {
+          destination[key] = arguments[i][key];
+        }
+      }
+    }
+
+    return destination;
+  };
+
+  // console.log(_.extend({name: 'moe'}, {age: 50}));
+
+  _.extendOwn = function(destination, sources) {
+    if (!(destination instanceof Object)) {
+      return {};
+    }
+
+    var i, key,
+        argLength = arguments.length;
+    for (i = 1; i < argLength; i++) {
+      if (arguments[i] instanceof Object) {
+        for (key in arguments[i]) {
+          if (destination[key] && destination.hasOwnProperty(key)) {
+            destination[key] = arguments[i][key];
+          }
+        }
+      }
+    }
+
+    return destination;
+  };
+
+  _.pick = function(obj, keys) {
+    if (!(obj instanceof Object)) {
+      return {};
+    }
+
+    var key,
+        result = {};
+    if (typeof keys === 'function') {
+      for (key in obj) {
+        if (keys(obj[key], key, obj)) {
+          result[key] = obj[key];
+        }
+      }
+      return result;
+    }
+
+    var item,
+        argLength = arguments.length;
+    for (var i = 1; i < argLength; i++) {
+      item = obj[arguments[i]];
+      if (item) {
+        result[arguments[i]] = item;
+      }
+    }
+    return result;
+  };
+
+  // console.log(_.pick({name: 'moe', age: 50, userid: 'moe1'}, 'name', 'age'));
+  // console.log(_.pick({name: 'moe', age: 50, userid: 'moe1'}, function(value, key, object) {
+  //   return value === 50;
+  // }));
+
+  _.omit = function(obj, keys) {
+    if (!(obj instanceof Object)) {
+      return {};
+    }
+
+    var key,
+        result = {};
+    if (typeof keys === 'function') {
+      for (key in obj) {
+        if (!keys(obj[key], key, obj)) {
+          result[key] = obj[key];
+        }
+      }
+      return result;
+    }
+
+    var argLength = arguments.length;
+    for (key in obj) {
+      for (var i = 1; i < argLength; i++) {
+        if (key !== arguments[i]) {
+          result[key] = obj[key];
+        }
+      }
+    }
+    return result;
+  };
+
+  // console.log(_.omit({name: 'moe', age: 50, userid: 'moe1'}, 'userid'));
+  // console.log(_.omit({name: 'moe', age: 50, userid: 'moe1'}, function(value, key, object) {
+  //   return value === 50;
+  // }));
+
+
+  _.defaults = function(obj, defaults) {
+    if (!(obj instanceof Object)) {
+      return {};
+    }
+
+    var argLength = arguments.length;
+    for (var i = 1; i < argLength; i++) {
+      if (arguments[i] instanceof Object) {
+        for (var key in arguments[i]) {
+          obj[key] = obj[key] || arguments[i][key];
+        }
+      }
+    }
+
+    return obj;
+  };
+
+  // var iceCream = {flavor: "chocolate"};
+  // console.log(_.defaults(iceCream, {flavor: "vanilla", sprinkles: "lots"}));
+
+  _.clone = function(obj) {
+    if (!(obj instanceof Object)) {
+      return {};
+    }
+
+    var result = {};
+    for (var key in obj) {
+      result[key] = obj[key];
+    }
+
+    return result;
+  };
+
+  // console.log(_.clone({name: 'moe'}));
+
+  // TODO _.tap = function(obj, interceptor) {};
 
   _.has = function(obj, key) {
     if (!(obj instanceof Object)) {
-      return [];
+      return false;
     }
 
     return obj.hasOwnProperty(key);
   };
 
+  // console.log(_.has({a: 1, b: 2, c: 3}, "b"));
+
+  _.property = function(key) {
+    if (typeof key === 'string') {
+      return function(obj) {
+        if (obj instanceof Object) {
+          return obj[key];
+        }
+        throw TypeError();
+      };
+    }
+    throw TypeError();
+  };
+
+  // var stooge = {name: 'moe'};
+  // console.log('moe' === _.property('name')(stooge));
+
+  _.propertyOf = function(obj) {
+    if (!(obj instanceof Object)) {
+      throw TypeError();
+    }
+
+    return function(key) {
+      if (typeof key === 'string') {
+        return obj[key];
+      }
+      throw TypeError();
+    };
+  };
+
+  // var stooge = {name: 'moe'};
+  // console.log(_.propertyOf(stooge)('name'));
+
+  // TODO _.matcher = function(attrs) {};
 }.call(this));

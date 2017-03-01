@@ -41,8 +41,37 @@ var _ = require('underscore');
 
 // console.log(_.unzip([['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]]));
 
-var an_obj = { 100: 'a', 2: 'b', 7: 'c' };
-console.log(Object.keys(an_obj)); // console: ['2', '7', '100']
-for (var i in an_obj) {
-  console.log(i);
+// var an_obj = { 100: 'a', 2: 'b', 7: 'c' };
+// console.log(Object.keys(an_obj)); // console: ['2', '7', '100']
+// for (var i in an_obj) {
+//   console.log(i);
+// }
+
+
+function Stooge() {
+  this.a = 1;
+  this.b = 2;
+  this.getA = function() {
+    return this.a;
+  };
 }
+
+Stooge.prototype.x = 12;
+Stooge.prototype.y = 34;
+Stooge.prototype.getX = function() {
+  return this.x;
+};
+
+// var moe = _.create(Stooge.prototype, {name: 'lm'});
+
+// console.log(moe.a);
+
+var s = new Stooge();
+
+for(var key in s) {
+  if (typeof s[key] === 'function') {
+    console.log(key);
+  }
+}
+
+console.log(_.functions(new Stooge()));
