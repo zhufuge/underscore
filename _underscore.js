@@ -1444,4 +1444,149 @@
   // console.log(_.propertyOf(stooge)('name'));
 
   // TODO _.matcher = function(attrs) {};
+
+  _.isEqual = function(obj, other) {
+    if (obj instanceof Object && other instanceof Object) {
+      // Object
+      for (var key in obj) {
+        if (arguments.callee(obj[key], other[key]) === false) {
+          return false;
+        }
+      }
+      return true;
+    }
+    if (obj instanceof Array && other instanceof Array) {
+      // Array type
+      for (var i = 0, length = obj.length; i < length; i++) {
+        if (arguments.callee(obj[i], other[i]) === false) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    // basic type
+    return obj === other;
+  };
+
+
+  // var stooge = {name: 'moe', luckyNumbers: [13, 27, {a:undefined}], a: {a:1,b:2}};
+  // var clone  = {name: 'moe', luckyNumbers: [13, 27, {a:undefined}], a: {a:1,b:2}};
+  // console.log(stooge == clone);
+  // console.log(_.isEqual(stooge, clone));
+
+  _.isMatch = function(obj, properties) {
+    if (!(obj instanceof Object) || !(properties instanceof Object)) {
+      return false;
+    }
+
+    for (var key in properties) {
+      if (_.isEqual(properties[key], obj[key]) === false) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  // var stooge = {name: 'moe', age: 32};
+  // console.log(_.isMatch(stooge, {age: 31}));
+
+  _.isEmpty = function(obj) {
+    if (obj instanceof Object) {
+      for (var key in obj) {
+        return false;
+      }
+    }
+
+    if (obj instanceof Array ||
+       typeof obj === 'string') {
+      return obj.length === 0;
+    }
+
+    return true;
+  };
+
+  // console.log(_.isEmpty([1, 2, 3]));
+  // console.log(_.isEmpty({a:undefined}));
+  // console.log(_.isEmpty(1));
+
+
+  // TODO _.isElement = function(obj) {  };
+
+  _.isArray = function(obj) {
+    return obj instanceof Array;
+  };
+
+  // console.log((function(){ return _.isArray(arguments); })());
+  // console.log(_.isArray([1,2,3]));
+
+  _.isObject = function(obj) {
+    return obj instanceof Object;
+  };
+
+  // console.log(_.isObject(1));
+
+  _.isArguments = function(obj) {
+    return _.has(obj, 'callee');
+  };
+
+  // console.log((function(){ return _.isArguments(arguments); })(1, 2, 3));
+  // console.log(_.isArguments([1,2,3]));
+
+  _.isFunction = function(obj) {
+    return typeof obj === 'function';
+  };
+
+  // console.log(_.isFunction(console.log));
+
+  _.isString = function(obj) {
+    return typeof obj === 'string';
+  };
+
+  _.isNumber = function(obj) {
+    return typeof obj === 'number';
+  };
+
+  _.isFinite = function(obj) {
+    return obj === Infinity || obj === -Infinity;
+  };
+
+  // console.log(_.isFinite(-Infinity));
+  // console.log(_.isFinite(-1));
+
+  _.isBoolean = function(obj) {
+    return typeof obj === 'boolean';
+  };
+
+  // console.log(_.isBoolean(false));
+
+  _.isDate = function(obj) {
+    return toString.call(obj) === '[object Date]';
+  };
+
+  // console.log(_.isDate(new Date()));
+
+  _.isRegExp = function(obj) {
+    return toString.call(obj) === '[object RegExp]';
+  };
+
+  // console.log(_.isRegExp(/moe/));
+
+  _.isError = function(obj) {
+    return toString.call(obj) === '[object Error]';
+  };
+
+  _.isNaN = function(obj) {
+    return isNaN(obj);
+  };
+
+  _.isNull = function(obj) {
+    return obj === Null;
+  };
+
+  _.isUndefined = function(obj) {
+    return obj === void 0;
+  };
 }.call(this));

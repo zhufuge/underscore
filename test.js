@@ -48,30 +48,38 @@ var _ = require('underscore');
 // }
 
 
-function Stooge() {
-  this.a = 1;
-  this.b = 2;
-  this.getA = function() {
-    return this.a;
-  };
-}
+// function Stooge() {
+//   this.a = 1;
+//   this.b = 2;
+//   this.getA = function() {
+//     return this.a;
+//   };
+// }
 
-Stooge.prototype.x = 12;
-Stooge.prototype.y = 34;
-Stooge.prototype.getX = function() {
-  return this.x;
-};
+// Stooge.prototype.x = 12;
+// Stooge.prototype.y = 34;
+// Stooge.prototype.getX = function() {
+//   return this.x;
+// };
 
-// var moe = _.create(Stooge.prototype, {name: 'lm'});
+// // var moe = _.create(Stooge.prototype, {name: 'lm'});
 
-// console.log(moe.a);
+// // console.log(moe.a);
 
-var s = new Stooge();
+// var s = new Stooge();
 
-for(var key in s) {
-  if (typeof s[key] === 'function') {
-    console.log(key);
-  }
-}
+// for(var key in s) {
+//   if (typeof s[key] === 'function') {
+//     console.log(key);
+//   }
+// }
 
-console.log(_.functions(new Stooge()));
+// console.log(_.functions(new Stooge()));
+
+// var stooge = {name: 'moe', luckyNumbers: [13, 27, {a:1}], a: {a:1,b:2}};
+// var clone  = {name: 'moe', luckyNumbers: [13, 27, {a:1}], a: {a:1,b:2}};
+// console.log(stooge == clone);
+// console.log(_.isEqual(stooge, clone));
+
+
+console.log(_.isEmpty([]));
