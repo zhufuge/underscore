@@ -1513,7 +1513,9 @@
   // console.log(_.isEmpty(1));
 
 
-  // TODO _.isElement = function(obj) {  };
+  _.isElement = function(obj) {
+    return obj.nodeType === 1;
+  };
 
   _.isArray = function(obj) {
     return obj instanceof Array;
@@ -1589,4 +1591,135 @@
   _.isUndefined = function(obj) {
     return obj === void 0;
   };
+
+  // Utility Functions
+
+  _.noConflict = function() {
+    return _;
+  };
+
+  _.identity = function(value) {
+    return value;
+  };
+
+  _.constant = function(value) {
+    return function() {
+      return value;
+    };
+  };
+
+  _.noop = function() {
+    return undefined;
+  };
+
+  // I don't kwon what chaining is.
+  // _.times = function(n, iteratee) {  };
+
+
+  _.random = function(min, max) {
+    if (max === void 0) {
+      max = min;
+      min = 0;
+    }
+
+    return Math.floor(Math.random() * (max - min) + min);
+  };
+
+  // console.log(_.random(99, 100));
+
+  _.mixin = function(obj) {
+    if (obj instanceof Object) {
+      for (var key in obj) {
+        _[key] = obj[key];
+      }
+    }
+  };
+
+  _.iteratee = function(value) {
+    return function(val, key, obj) {
+      if (val instanceof Object || val instanceof Array) {
+        return val[value];
+      }
+    };
+  };
+
+  // var stooges = [{name: 'curly', age: 25}, {name: 'moe', age: 21}, {name: 'larry', age: 23}];
+  // console.log(_.map(stooges, _.iteratee('age')));
+
+  // TODO _.uniqueId = function() {  };
+
+  _.escape = function(string) {
+    var escapeString = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '\"': '&quot;',
+      '\'': '&#96',
+      '\/': '&#x2F'
+    };
+    return string.replace(/[&<>]/gm, function(match) {
+      return escapeString[match];
+    });
+  };
+  // console.log(_.escape('<Curly>, Larry & Moe'));
+
+  _.unescape = function(string) {
+    var escapeString = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '\"': '&quot;',
+      '\'': '&#96',
+      '\/': '&#x2F'
+    };
+    return string.replace(
+        /(&amp;)|(&lt;)|(&gt;)|(&quot)|(&#96)|(&#x2F)/gm,
+      function(match) {
+        console.log(match);
+        for (var key in escapeString) {
+          if (escapeString[key] === match) {
+            return key;
+          }
+        }
+        return '';
+      });
+  };
+
+  // console.log(_.unescape('Curly, Larry &amp; Moe'));
+
+  _.result = function(obj, property, defaultValue) {
+    if (defaultValue !== void 0) {
+      return defaultValue;
+    }
+
+    if (!(obj instanceof Object)) {
+      throw new TypeError();
+    }
+
+    if (typeof obj[property] === 'function') {
+      return obj[property]();
+    }
+
+    return obj[property];
+  };
+
+  _.now = function() {
+    return Date.now();
+  };
+
+  _.template = function(templateString, settings) {
+    return function(obj) {
+      if (!(obj instanceof Object)) {
+        return templateString;
+      }
+
+      return templateString.replace(
+          /<%=(\s*)(\w*)(\s*)%>/gm,
+        function(match, p1, p2) { return obj[p2]; }
+      );
+    };
+  };
+
+  // var compiled = _.template("hello: <%= name %>");
+  // console.log(compiled({name: 'moe'}));
 }.call(this));
